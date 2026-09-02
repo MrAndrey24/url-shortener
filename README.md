@@ -4,6 +4,30 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+A high-performance, cloud-native RESTful API for shortening long URLs, tracking link access metrics, and managing shortened links. Built with **Quarkus**, **Java 21**, and **Hibernate ORM with Panache**.
+
+Inspired by the [roadmap.sh URL Shortening Service Project](https://roadmap.sh/projects/url-shortening-service).
+
+---
+
+## ✨ Features
+
+- **URL Shortening**: Generates unique, short codes for long URLs with duplicate collision checks.
+- **Analytics & Tracking**: Records redirect count (`accessCount`) and tracks timestamps (`createdAt`, `updatedAt`).
+- **RESTful Endpoints**: Full CRUD capabilities for URL management.
+- **Data Validation**: Request payload verification via Jakarta Validation annotations.
+- **In-Memory Storage**: Zero-configuration setup using an H2 in-memory database.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Java 21 & JDK 21**
+- **Quarkus** (RESTEasy Reactive, Jackson)
+- **Hibernate ORM with Panache** (Active Record Pattern)
+- **H2 Database** (In-Memory)
+- **Jakarta Validation**
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
@@ -52,29 +76,3 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/url-shortening-service-1.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): Build RESTful web services and APIs using Jakarta REST (formerly
-  JAX-RS)
-- JDBC Driver - H2 ([guide](https://quarkus.io/guides/datasource)): Connect to the H2 database via JDBC
-- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Bean validation using Hibernate Validator and
-  Jakarta Validation annotations
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplified JPA/Hibernate data
-  access layer with active record and repository patterns
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
