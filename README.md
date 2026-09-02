@@ -28,6 +28,15 @@ Inspired by the [roadmap.sh URL Shortening Service Project](https://roadmap.sh/p
 - **H2 Database** (In-Memory)
 - **Jakarta Validation**
 
+
+## 🧪 Testing the API with Swagger UI
+
+When running the application in development mode (`./mvnw quarkus:dev`), you can test all API endpoints interactively via Swagger UI:
+
+👉 **Swagger UI Interface:** <http://localhost:8080/q/swagger-ui/>
+
+*(OpenAPI specification JSON is also generated automatically at <http://localhost:8080/q/openapi>).*
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:

@@ -14,12 +14,6 @@ public class ExampleResource {
     @Inject
     UrlService service;
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "Hello from Quarkus REST";
-    }
-
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -79,9 +73,11 @@ public class ExampleResource {
     @DELETE
     @Path("/{shortCode}")
     @Produces(MediaType.TEXT_PLAIN)
-    public void delete(@PathParam("shortCode") String code) {
+    public String delete(@PathParam("shortCode") String code) {
 
         service.deleteByCode(code);
+
+        return "Successfully deleted";
 
     }
 }

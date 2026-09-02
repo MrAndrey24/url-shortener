@@ -1,12 +1,12 @@
 package io.github.mrandrey24.controller.dto;
 
-import java.util.Date;
+import java.time.Instant;
 
 public record UrlResponse(
         String url,
         String shortCode,
-        Date createdAt,
-        Date updatedAt,
+        Instant createdAt,
+        Instant updatedAt,
         Integer accessCount
 ) {
 }

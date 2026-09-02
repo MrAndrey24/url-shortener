@@ -7,9 +7,6 @@ import jakarta.ws.rs.NotFoundException;
 
 import java.security.SecureRandom;
 
-import static io.quarkus.hibernate.orm.panache.PanacheEntityBase.delete;
-import static io.quarkus.hibernate.orm.panache.PanacheEntityBase.find;
-
 @ApplicationScoped
 public class UrlService {
 
@@ -23,7 +20,7 @@ public class UrlService {
 
         do {
             shortCode = generateShortCode();
-        } while (find("shortCode", shortCode).firstResultOptional().isPresent());
+        } while (Url.find("shortCode", shortCode).firstResultOptional().isPresent());
 
 
         Url entity = new Url();
@@ -46,7 +43,7 @@ public class UrlService {
 
     @Transactional
     public Url findByCode(String code) {
-        Url entity = find("shortCode", code).firstResult();
+        Url entity = Url.find("shortCode", code).firstResult();
 
         if (entity == null) {
             throw new NotFoundException("Url not found");
@@ -58,7 +55,7 @@ public class UrlService {
 
     @Transactional
     public void deleteByCode(String code) {
-        delete("shortCode", code);
+        Url.delete("shortCode", code);
     }
 
 
