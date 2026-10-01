@@ -22,7 +22,7 @@ Inspired by the [roadmap.sh URL Shortening Service Project](https://roadmap.sh/p
 
 ## 🛠️ Tech Stack
 
-- **Java 21 & JDK 21**
+- **Java 25 & JDK 25**
 - **Quarkus** (RESTEasy Reactive, Jackson)
 - **Hibernate ORM with Panache** (Active Record Pattern)
 - **H2 Database** (In-Memory)
