@@ -3,10 +3,13 @@ package io.github.mrandrey24.controller;
 import io.github.mrandrey24.controller.dto.CreateRequest;
 import io.github.mrandrey24.controller.dto.UpdateRequest;
 import io.github.mrandrey24.controller.dto.UrlResponse;
+import io.github.mrandrey24.controller.dto.UrlResponseStats;
 import io.github.mrandrey24.service.UrlService;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 @Path("/api/v1")
 public class ExampleResource {
@@ -18,7 +21,7 @@ public class ExampleResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public UrlResponse save(CreateRequest request) {
+    public UrlResponse save(@RequestBody @Valid CreateRequest request) {
 
         var dto = service.createUrl(request.url());
 
@@ -26,9 +29,7 @@ public class ExampleResource {
                 dto.url,
                 dto.shortCode,
                 dto.createdAt,
-                dto.updatedAt,
-                dto.accessCount
-
+                dto.updatedAt
         );
 
     }
@@ -36,8 +37,7 @@ public class ExampleResource {
     @PUT()
     @Path("/{shortCode}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public UrlResponse update(@PathParam("shortCode") String shortCode, UpdateRequest request) {
+    public UrlResponse update(@PathParam("shortCode") String shortCode, @RequestBody @Valid UpdateRequest request) {
 
         var dto = service.updateUrl(shortCode, request.url());
 
@@ -45,8 +45,7 @@ public class ExampleResource {
                 dto.url,
                 dto.shortCode,
                 dto.createdAt,
-                dto.updatedAt,
-                dto.accessCount
+                dto.updatedAt
         );
 
     }
@@ -54,7 +53,6 @@ public class ExampleResource {
     @GET
     @Path("/{shortCode}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public UrlResponse retrieveOriginalUrl(@PathParam("shortCode") String shortCode) {
 
         var dto = service.findByCode(shortCode);
@@ -63,10 +61,24 @@ public class ExampleResource {
                 dto.url,
                 dto.shortCode,
                 dto.createdAt,
+                dto.updatedAt
+        );
+
+    }
+
+    @GET
+    @Path("/stats/{shortCode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public UrlResponseStats retrieveUrlStats(@PathParam("shortCode") String shortCode) {
+        var dto = service.findByCode(shortCode);
+
+        return new UrlResponseStats(
+                dto.url,
+                dto.shortCode,
+                dto.createdAt,
                 dto.updatedAt,
                 dto.accessCount
         );
-
     }
 
 

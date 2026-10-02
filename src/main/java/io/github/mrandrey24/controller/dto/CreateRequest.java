@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
 public record CreateRequest(
-        @NotBlank @URL String url
+        @NotBlank(message = "URL cannot be blank")
+        @URL(message = "Invalid URL format")
+        String url
 ) {
 }

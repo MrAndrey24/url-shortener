@@ -62,7 +62,7 @@ public class UrlService {
 
 
     private String generateShortCode() {
-        StringBuilder sb = new StringBuilder(SHORT_CODE_LENGTH);
+        var sb = new StringBuilder(SHORT_CODE_LENGTH);
         for (int i = 0; i < SHORT_CODE_LENGTH; i++) {
             int index = RANDOM.nextInt(CHARSET.length());
             sb.append(CHARSET.charAt(index));
