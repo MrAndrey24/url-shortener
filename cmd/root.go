@@ -9,7 +9,9 @@ import (
 
 func Execute() {
 
-	repo := local.NewMemoryURLRepository()
+	db := local.InitDB("data.db")
+
+	repo := local.NewMemoryURLRepository(db)
 	src := service.NewURLService(repo)
 	ctrl := controller.NewURLController(src)
 

@@ -1,72 +1,56 @@
-package local
+package data
 
 import (
 	"errors"
-	"time"
 
 	"github.com/mrandrey24/url-shortening-server/internal/domain"
+	"gorm.io/gorm"
 )
 
 // Dependency injection
 type memoryRepository struct {
-	urls   []*domain.URL
-	nextID int64
+	db *gorm.DB
 }
 
 // NewMemoryURLRepository Constructor for memoryRepository
-func NewMemoryURLRepository() domain.URLRepository {
+func NewMemoryURLRepository(db *gorm.DB) domain.URLRepository {
 	return &memoryRepository{
-		urls:   make([]*domain.URL, 0),
-		nextID: 1,
+		db: db,
 	}
 }
 
 func (r *memoryRepository) Save(req *domain.URL) error {
-	req.ID = r.nextID
-	r.nextID++
-	r.urls = append(r.urls, req)
-	return nil
+	return r.db.Create(req).Error
 }
 
 func (r *memoryRepository) Update(code string, req *domain.URL) (*domain.URL, error) {
-	url, err := r.FindUrlStatsByShortCode(code)
-
-	if err != nil {
-		return nil, errors.New("ShortCode not found")
+	u := r.db.Model(&domain.URL{}).Where("short_code = ?", code).Update("URL", req.URL)
+	if u.Error != nil {
+		return nil, u.Error
 	}
-
-	url.URL = req.URL
-	url.UpdatedAt = time.Now()
-
-	return url, err
+	return req, nil
 }
 
-func (r *memoryRepository) Delete(id string) error {
-	for i, url := range r.urls {
-		if url.ShortCode == id {
-			r.urls = append(r.urls[:i], r.urls[i+1:]...)
-			return nil
-		}
-	}
-	return errors.New("ShortCode not found")
+func (r *memoryRepository) Delete(shortCode string) error {
+	var u domain.URL
+	return r.db.Where("short_code = ?", shortCode).Delete(&u).Error
 }
 
 func (r *memoryRepository) FindByShortCode(shortCode string) (*domain.URL, error) {
-	for _, url := range r.urls {
-		if url.ShortCode == shortCode {
-			url.IncrementAccessCount()
-			return url, nil
-		}
+	var u domain.URL
+	err := r.db.Model(&domain.URL{}).Where("short_code = ?", shortCode).UpdateColumn("access_count", gorm.Expr("access_count + 1")).First(&u).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.New("ShortCode not found")
 	}
-	return nil, errors.New("ShortCode not found")
+	return &u, err
 }
 
-func (r *memoryRepository) FindUrlStatsByShortCode(shortCode string) (*domain.URL, error) {
-	for _, items := range r.urls {
-		if items.ShortCode == shortCode {
-			return items, nil
-		}
-	}
-
-	return nil, errors.New("ShortCode not found")
-}
+//func (r *memoryRepository) FindUrlStatsByShortCode(shortCode string) (*domain.URL, error) {
+//	for _, items := range r.urls {
+//		if items.ShortCode == shortCode {
+//			return items, nil
+//		}
+//	}
+//
+//	return nil, errors.New("ShortCode not found")
+//}

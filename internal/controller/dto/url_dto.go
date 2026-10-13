@@ -9,7 +9,7 @@ type URLRequest struct {
 }
 
 type URLResponseGetByCode struct {
-	ID        int64     `json:"id"`
+	ID        uint      `json:"id"`
 	URL       string    `json:"url"`
 	ShortCode string    `json:"shortCode"`
 	CreatedAt time.Time `json:"createdAt"`
@@ -17,7 +17,7 @@ type URLResponseGetByCode struct {
 }
 
 type URLResponseGetStats struct {
-	ID          int64     `json:"id"`
+	ID          uint      `json:"id"`
 	URL         string    `json:"url"`
 	ShortCode   string    `json:"shortCode"`
 	CreatedAt   time.Time `json:"createdAt"`
