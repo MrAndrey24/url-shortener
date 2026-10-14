@@ -2,27 +2,24 @@ package domain
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type URL struct {
-	ID          int64     `json:"id"`
-	URL         string    `json:"url"`
-	ShortCode   string    `json:"shortCode"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
-	AccessCount int64     `json:"accessCount"`
-}
-
-// IncrementAccessCount Method
-func (u *URL) IncrementAccessCount() {
-	u.AccessCount++
-	u.UpdatedAt = time.Now()
+	gorm.Model
+	ID          uint   `gorm:"primarykey"`
+	URL         string `gorm:"not null"`
+	ShortCode   string `gorm:"unique;not null"`
+	AccessCount int64  `gorm:"default:0"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type URLRepository interface {
 	Save(u *URL) error
 	Update(shortCode string, u *URL) (*URL, error)
-	Delete(id string) error
+	Delete(shortCode string) error
 	FindByShortCode(shortCode string) (*URL, error)
-	FindUrlStatsByShortCode(shortCode string) (*URL, error)
+	//FindUrlStatsByShortCode(shortCode string) (*URL, error)
 }

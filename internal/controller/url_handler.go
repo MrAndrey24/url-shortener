@@ -34,7 +34,9 @@ func (a *URLController) CreateShortUrl(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, url)
+	response := mapper.DomainURLToResponseCode(url)
+
+	c.JSON(http.StatusCreated, response)
 }
 
 func (a *URLController) UpdateShortUrl(c *gin.Context) {
@@ -79,7 +81,7 @@ func (a *URLController) GetShortUrlByCode(c *gin.Context) {
 func (a *URLController) GetShortUrlStats(c *gin.Context) {
 	code := c.Param("code")
 
-	url, err := a.service.RetrieveStats(code)
+	url, err := a.service.RetrieveByShortCode(code)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
