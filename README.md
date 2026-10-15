@@ -17,7 +17,7 @@ This project is based on the roadmap.sh [URL Shortening Service](https://roadmap
 
 - Modular Architecture: Uses the Repository Pattern to abstract database operations.
 
-- Local Database: Data is persisted locally (No external Postgres/SQL server required).
+- Local Database: Data is persisted in a local SQLite database file (no external database server required).
 
 
 ## Tech Stack
@@ -26,7 +26,7 @@ This project is based on the roadmap.sh [URL Shortening Service](https://roadmap
 
 - Framework: Gin Gonic
 
-- Database: Local File-based storage (embedded in internal/data)
+- Database: SQLite, accessed through GORM
 
 - Containerization: Docker & Docker Compose
 
@@ -90,6 +90,7 @@ go run .
 ```
 
 The server will start by default on port 8080.
+The application creates or opens `data.db` in the current working directory and automatically migrates the URL schema on startup.
 
 
 ## Running with Docker
@@ -261,5 +262,4 @@ DELETE /api/v1/shorter/:code
 
 #### Response (`204 No Content`)
 *(No response body)*
-
 
