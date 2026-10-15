@@ -1,19 +1,19 @@
-package cmd
+package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mrandrey24/url-shortening-server/internal/controller"
-	local "github.com/mrandrey24/url-shortening-server/internal/data"
+	"github.com/mrandrey24/url-shortening-server/internal/handler"
+	"github.com/mrandrey24/url-shortening-server/internal/repository"
 	"github.com/mrandrey24/url-shortening-server/internal/service"
 )
 
-func Execute() {
+func main() {
 
-	db := local.InitDB("data.db")
+	db := repository.InitDB("data.db")
 
-	repo := local.NewMemoryURLRepository(db)
+	repo := repository.NewURLRepository(db)
 	src := service.NewURLService(repo)
-	ctrl := controller.NewURLController(src)
+	ctrl := handler.NewURLHandler(src)
 
 	router := gin.Default()
 

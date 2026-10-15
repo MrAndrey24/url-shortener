@@ -21,5 +21,4 @@ type URLRepository interface {
 	Update(shortCode string, u *URL) (*URL, error)
 	Delete(shortCode string) error
 	FindByShortCode(shortCode string) (*URL, error)
-	//FindUrlStatsByShortCode(shortCode string) (*URL, error)
 }
