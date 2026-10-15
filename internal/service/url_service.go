@@ -55,7 +55,7 @@ func (s *URLService) RetrieveByShortCode(code string) (*domain.URL, error) {
 }
 
 func (s *URLService) RetrieveStats(code string) (*domain.URL, error) {
-	return s.repo.FindUrlStatsByShortCode(code)
+	return s.repo.FindByShortCode(code)
 }
 
 func (s *URLService) DeleteShortUrl(code string) error {

@@ -1,8 +1,8 @@
 package mapper
 
 import (
-	"github.com/mrandrey24/url-shortening-server/internal/controller/dto"
 	"github.com/mrandrey24/url-shortening-server/internal/domain"
+	"github.com/mrandrey24/url-shortening-server/internal/handler/dto"
 )
 
 func DomainURLToResponseCode(url *domain.URL) *dto.URLResponseGetByCode {

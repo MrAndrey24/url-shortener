@@ -17,7 +17,7 @@ This project is based on the roadmap.sh [URL Shortening Service](https://roadmap
 
 - Modular Architecture: Uses the Repository Pattern to abstract database operations.
 
-- Local Database: Data is persisted locally (No external Postgres/SQL server required).
+- Local Database: Data is persisted in a local SQLite database file (no external database server required).
 
 
 ## Tech Stack
@@ -26,7 +26,7 @@ This project is based on the roadmap.sh [URL Shortening Service](https://roadmap
 
 - Framework: Gin Gonic
 
-- Database: Local File-based storage (embedded in internal/data)
+- Database: SQLite, accessed through GORM
 
 - Containerization: Docker & Docker Compose
 
@@ -40,27 +40,27 @@ This project follows the Standard Go Project Layout to maintain clean code organ
 ```bash
 url-shortener/
 ├── cmd/
-│   └── root.go               # Application entry point
+│   └── main.go                  # 🚀 Single entry point (DI wiring & server startup)
 ├── internal/
-│   ├── controller/          # HTTP Handlers (Transport Layer)
-│   │   ├── dto/
-│   │   │   └── url_dto.go    # Data Transfer Objects (Request/Response structs)
-│   │   ├── mapper/
-│   │   │   └── url_mapper.go # Maps between DTOs and Domain models
-│   │   └── url_handler.go   # Gin route handlers
-│   ├── data/                # Data Access Layer (Repository Implementation)
-│   │   └── url_data.go      # Local DB logic
-│   ├── domain/              # Business Models (Entities)
+│   ├── domain/                      # Core business entities
 │   │   └── url.go
-│   └── service/             # Business Logic Layer
-│       └── url_service.go   # Core logic & Repository interface usage
+│   ├── handler/                     # HTTP transport layer (Gin handlers)
+│   │   ├── dto/
+│   │   │   └── url_dto.go
+│   │   ├── mapper/
+│   │   │   └── url_mapper.go
+│   │   └── url_handler.go
+│   ├── repository/                  # Data access layer (GORM & DB setup)
+│   │   ├── db.go
+│   │   └── url_repository.go
+│   └── service/                     # Business logic layer
+│       └── url_service.go
 ├── .dockerignore
 ├── .gitignore
 ├── docker-compose.yml
 ├── Dockerfile
 ├── go.mod
-├── go.sum
-└── main.go
+└── go.sum
 ```
     
 
@@ -90,6 +90,7 @@ go run .
 ```
 
 The server will start by default on port 8080.
+The application creates or opens `data.db` in the current working directory and automatically migrates the URL schema on startup.
 
 
 ## Running with Docker
@@ -261,5 +262,4 @@ DELETE /api/v1/shorter/:code
 
 #### Response (`204 No Content`)
 *(No response body)*
-
 
