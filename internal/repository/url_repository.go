@@ -12,7 +12,7 @@ type repository struct {
 	db *gorm.DB
 }
 
-// NewURLRepository Constructor for memoryRepository
+// NewURLRepository Constructor for Repository
 func NewURLRepository(db *gorm.DB) domain.URLRepository {
 	return &repository{
 		db: db,
