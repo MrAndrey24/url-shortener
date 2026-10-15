@@ -10,17 +10,19 @@ import (
 	"github.com/mrandrey24/url-shortening-server/internal/service"
 )
 
-type URLHandler struct {
+// UrlHandler Dependency Injection
+type UrlHandler struct {
 	service *service.URLService
 }
 
-func NewURLHandler(s *service.URLService) *URLHandler {
-	return &URLHandler{
+// NewURLHandler Constructor for UrlHandler
+func NewURLHandler(s *service.URLService) *UrlHandler {
+	return &UrlHandler{
 		service: s,
 	}
 }
 
-func (a *URLHandler) CreateShortUrl(c *gin.Context) {
+func (h *UrlHandler) CreateShortUrl(c *gin.Context) {
 	var req *dto.URLRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -28,7 +30,7 @@ func (a *URLHandler) CreateShortUrl(c *gin.Context) {
 		return
 	}
 
-	url, err := a.service.CreateShortUrl(req.URL)
+	url, err := h.service.CreateShortUrl(req.URL)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -39,7 +41,7 @@ func (a *URLHandler) CreateShortUrl(c *gin.Context) {
 	c.JSON(http.StatusCreated, response)
 }
 
-func (a *URLHandler) UpdateShortUrl(c *gin.Context) {
+func (h *UrlHandler) UpdateShortUrl(c *gin.Context) {
 	code := c.Param("code")
 	var req dto.URLRequest
 
@@ -52,7 +54,7 @@ func (a *URLHandler) UpdateShortUrl(c *gin.Context) {
 		URL: req.URL,
 	}
 
-	updatedURL, err := a.service.UpdateShortUrl(code, urlData)
+	updatedURL, err := h.service.UpdateShortUrl(code, urlData)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -63,10 +65,10 @@ func (a *URLHandler) UpdateShortUrl(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (a *URLHandler) GetShortUrlByCode(c *gin.Context) {
+func (h *UrlHandler) GetShortUrlByCode(c *gin.Context) {
 	code := c.Param("code")
 
-	url, err := a.service.RetrieveByShortCode(code)
+	url, err := h.service.RetrieveByShortCode(code)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -78,10 +80,10 @@ func (a *URLHandler) GetShortUrlByCode(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (a *URLHandler) GetShortUrlStats(c *gin.Context) {
+func (h *UrlHandler) GetShortUrlStats(c *gin.Context) {
 	code := c.Param("code")
 
-	url, err := a.service.RetrieveByShortCode(code)
+	url, err := h.service.RetrieveByShortCode(code)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -93,10 +95,10 @@ func (a *URLHandler) GetShortUrlStats(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (a *URLHandler) DeleteShortUrl(c *gin.Context) {
+func (h *UrlHandler) DeleteShortUrl(c *gin.Context) {
 	code := c.Param("code")
 
-	if err := a.service.DeleteShortUrl(code); err != nil {
+	if err := h.service.DeleteShortUrl(code); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

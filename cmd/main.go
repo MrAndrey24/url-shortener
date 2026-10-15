@@ -13,7 +13,7 @@ func main() {
 
 	repo := repository.NewURLRepository(db)
 	src := service.NewURLService(repo)
-	ctrl := handler.NewURLHandler(src)
+	h := handler.NewURLHandler(src)
 
 	router := gin.Default()
 
@@ -22,11 +22,11 @@ func main() {
 		shorter := v1.Group("/shorter")
 		{
 			const codePath = "/:code"
-			shorter.POST("", ctrl.CreateShortUrl)
-			shorter.PUT(codePath, ctrl.UpdateShortUrl)
-			shorter.GET(codePath, ctrl.GetShortUrlByCode)
-			shorter.GET(codePath+"/stats", ctrl.GetShortUrlStats)
-			shorter.DELETE(codePath, ctrl.DeleteShortUrl)
+			shorter.POST("", h.CreateShortUrl)
+			shorter.PUT(codePath, h.UpdateShortUrl)
+			shorter.GET(codePath, h.GetShortUrlByCode)
+			shorter.GET(codePath+"/stats", h.GetShortUrlStats)
+			shorter.DELETE(codePath, h.DeleteShortUrl)
 
 		}
 	}
