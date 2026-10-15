@@ -1,26 +1,26 @@
-package controller
+package handler
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mrandrey24/url-shortening-server/internal/controller/dto"
-	"github.com/mrandrey24/url-shortening-server/internal/controller/mapper"
 	"github.com/mrandrey24/url-shortening-server/internal/domain"
+	"github.com/mrandrey24/url-shortening-server/internal/handler/dto"
+	"github.com/mrandrey24/url-shortening-server/internal/handler/mapper"
 	"github.com/mrandrey24/url-shortening-server/internal/service"
 )
 
-type URLController struct {
+type URLHandler struct {
 	service *service.URLService
 }
 
-func NewURLController(s *service.URLService) *URLController {
-	return &URLController{
+func NewURLHandler(s *service.URLService) *URLHandler {
+	return &URLHandler{
 		service: s,
 	}
 }
 
-func (a *URLController) CreateShortUrl(c *gin.Context) {
+func (a *URLHandler) CreateShortUrl(c *gin.Context) {
 	var req *dto.URLRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -39,7 +39,7 @@ func (a *URLController) CreateShortUrl(c *gin.Context) {
 	c.JSON(http.StatusCreated, response)
 }
 
-func (a *URLController) UpdateShortUrl(c *gin.Context) {
+func (a *URLHandler) UpdateShortUrl(c *gin.Context) {
 	code := c.Param("code")
 	var req dto.URLRequest
 
@@ -63,7 +63,7 @@ func (a *URLController) UpdateShortUrl(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (a *URLController) GetShortUrlByCode(c *gin.Context) {
+func (a *URLHandler) GetShortUrlByCode(c *gin.Context) {
 	code := c.Param("code")
 
 	url, err := a.service.RetrieveByShortCode(code)
@@ -78,7 +78,7 @@ func (a *URLController) GetShortUrlByCode(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (a *URLController) GetShortUrlStats(c *gin.Context) {
+func (a *URLHandler) GetShortUrlStats(c *gin.Context) {
 	code := c.Param("code")
 
 	url, err := a.service.RetrieveByShortCode(code)
@@ -93,7 +93,7 @@ func (a *URLController) GetShortUrlStats(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (a *URLController) DeleteShortUrl(c *gin.Context) {
+func (a *URLHandler) DeleteShortUrl(c *gin.Context) {
 	code := c.Param("code")
 
 	if err := a.service.DeleteShortUrl(code); err != nil {
